@@ -1,0 +1,9 @@
+logging:
+  level: INFO
+  format: '%(message)s'
+
+download:
+  mirror_url: "http://ftp.uk.debian.org/debian/dists/stable/main/Contents-{architecture}.gz"
+
+parse:
+  top_n: 10
