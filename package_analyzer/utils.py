@@ -14,5 +14,6 @@ def print_packages(package_stats: Dict[str, int]) -> None:
     header = f"{'#':<6}| {'Package'.ljust(35)}| {'File Count'}"
     print(header)
     print("-" * (len(header)))
+
     for index, (package, file_count) in enumerate(package_stats, start=1):
         print(f"{str(index).ljust(6)}| {package.ljust(35)}| {file_count}")

@@ -1,0 +1,23 @@
+name: package-analyzer
+base: core22
+version: '0.1.0'
+summary: A tool for analyzing Debian package statistics.
+description: |
+  This tool downloads a Debian repository's Contents file for a specified architecture, parses it, and outputs the top N packages based on the number of files associated with each package.
+
+grade: devel
+confinement: devmode
+
+parts:
+  package-analyzer:
+    plugin: python
+    source: .
+    build-packages:
+      - python3-setuptools
+    override-build: |
+      snapcraftctl build
+      cp -r etc $SNAPCRAFT_PART_INSTALL/
+
+apps:
+  package-analyzer:
+    command: bin/package_analyzer

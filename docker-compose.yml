@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  snap-tester:
+    build: .
+    container_name: snap_tester
+    # volumes:
+    #   - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    # tmpfs:
+    #   - /run
+    #   - /run/lock
+    # privileged: tru÷e
+    # command: while true; do sleep 1000; done

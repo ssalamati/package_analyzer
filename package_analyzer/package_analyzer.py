@@ -23,11 +23,13 @@ class PackageAnalyzer:
     handling large files.
     """
 
-    def __init__(self, arch: str, mirror_url: str, retry_count: int = 3, wait_seconds: int = 5):
+    def __init__(
+        self, arch: str, mirror_url: str, retry_count: int = 3, wait_seconds: int = 5
+    ):
         """
         Initializes the PackageAnalyzer with the specified architecture, mirror
         URL, retry count, and wait time.
-        
+
         :param arch: Architecture to analyze
         :param mirror_url: The URL of the mirror
         :param retry_count: The number of retry attempts for downloading data
@@ -38,8 +40,9 @@ class PackageAnalyzer:
         self.retry_count = retry_count
         self.wait_seconds = wait_seconds
 
-
-    def get_package_stats(self, top_n: int = 10, validate_lines: bool = False) -> Dict[str, int]:
+    def get_package_stats(
+        self, top_n: int = 10, validate_lines: bool = False
+    ) -> Dict[str, int]:
         """
         Retrieves package statistics by downloading and parsing the contents
         file, then summarizing the data.
@@ -66,22 +69,35 @@ class PackageAnalyzer:
 
         :return: The path to the downloaded file
         """
-        target_file = os.path.join(tempfile.gettempdir(), os.path.basename(self._mirror_url))
+        target_file = os.path.join(
+            tempfile.gettempdir(), os.path.basename(self._mirror_url)
+        )
 
-        with tqdm(unit='B', unit_scale=True, miniters=1, desc=f"Downloading Contents file for {self._arch}", disable=None) as progress_bar:
+        with tqdm(
+            unit="B",
+            unit_scale=True,
+            miniters=1,
+            desc=f"Downloading Contents file for {self._arch}",
+            disable=None,
+        ) as progress_bar:
+
             def update_progress_bar(blocknum, blocksize, totalsize):
                 if blocknum == 0:
                     progress_bar.total = totalsize
                 progress_bar.update(blocksize)
 
             try:
-                contents_file_path, _ = urllib.request.urlretrieve(self._mirror_url, target_file, reporthook=update_progress_bar)
+                contents_file_path, _ = urllib.request.urlretrieve(
+                    self._mirror_url, target_file, reporthook=update_progress_bar
+                )
                 return contents_file_path
 
             except urllib.error.URLError as e:
                 raise Exception("Failed to download Contents file") from e
 
-    def _parse_contents_file(self, contents_file_path: str, top_n: int, validate_lines: bool) -> Dict[str, int]:
+    def _parse_contents_file(
+        self, contents_file_path: str, top_n: int, validate_lines: bool
+    ) -> Dict[str, int]:
         """
         Parses the contents file to count the occurrences of each package.
 
@@ -92,13 +108,13 @@ class PackageAnalyzer:
         """
         package_stats = defaultdict(int)
 
-        with gzip.open(contents_file_path, 'rt') as file:
+        with gzip.open(contents_file_path, "rt") as file:
 
             for line in file:
                 if validate_lines and not self._is_contents_line_valid(line):
                     logging.warning(f"Invalid format detected in line: {line.strip()}")
                     continue
-                
+
                 packages = self._get_package_names(line)
 
                 for package in packages:
@@ -125,7 +141,7 @@ class PackageAnalyzer:
         :param contents_line: The line from which to extract package names
         :return: A list of package names
         """
-        packages = contents_line.rsplit(None, 1)[-1].split(',')
+        packages = contents_line.rsplit(None, 1)[-1].split(",")
         return [package.rsplit("/", 1)[-1] for package in packages]
 
     @staticmethod

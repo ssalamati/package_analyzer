@@ -7,7 +7,7 @@ from package_analyzer.cli import parse_arguments
 from package_analyzer.config_loader import load_config
 from package_analyzer.package_analyzer import PackageAnalyzer
 from package_analyzer.utils import print_packages
- 
+
 
 def main() -> None:
     """
@@ -22,8 +22,16 @@ def main() -> None:
     if args.quiet:
         logging.setLevel(logging.WARNING)
 
-    package_analyzer = PackageAnalyzer(args.architecture, config["download"]["mirror_url"], retry_count=config["download"]["retry_count"], wait_seconds=config["download"]["wait_seconds"])
-    package_stats = package_analyzer.get_package_stats(top_n=config["parse"]["top_n"], validate_lines=config["parse"]["validate_lines"])
+    package_analyzer = PackageAnalyzer(
+        args.architecture,
+        config["download"]["mirror_url"],
+        retry_count=config["download"]["retry_count"],
+        wait_seconds=config["download"]["wait_seconds"],
+    )
+    package_stats = package_analyzer.get_package_stats(
+        top_n=config["parse"]["top_n"],
+        validate_lines=config["parse"]["validate_lines"]
+    )
 
     print_packages(package_stats)
 
@@ -36,7 +44,10 @@ if __name__ == "__main__":
     """
     config = load_config()
 
-    logging.basicConfig(level=getattr(logging, config["logging"]["level"]), format=config["logging"]["format"])
+    logging.basicConfig(
+        level=getattr(logging, config["logging"]["level"]),
+        format=config["logging"]["format"],
+    )
 
     try:
         main()
