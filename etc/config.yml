@@ -3,7 +3,10 @@ logging:
   format: '%(message)s'
 
 download:
-  mirror_url: "http://ftp.uk.debian.org/debian/dists/stable/main/Contents-{architecture}.gz"
+  mirror_url: "http://ftp.uk.debian.org/debian/dists/stable/main/Contents-{arch}.gz"
+  retry_count: 3
+  wait_seconds: 5
 
 parse:
   top_n: 10
+  validate_lines: false

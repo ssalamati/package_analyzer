@@ -1,9 +1,0 @@
-#!/usr/bin/python3
-
-from package_analyzer.cli import parse_arguments
-from package_analyzer.config_loader import load_config
-
-
-if __name__ == "__main__":
-    args = parse_arguments()
-    config = load_config()
