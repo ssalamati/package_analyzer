@@ -24,7 +24,10 @@ class PackageAnalyzer:
     """
 
     def __init__(
-        self, arch: str, mirror_url: str, retry_count: int = 3, wait_seconds: int = 5
+        self, arch: str,
+        mirror_url: str,
+        retry_count: int = 3,
+        wait_seconds: int = 5
     ):
         """
         Initializes the PackageAnalyzer with the specified architecture, mirror
@@ -56,8 +59,12 @@ class PackageAnalyzer:
             wait=tenacity.wait_fixed(self.wait_seconds),
         )
 
-        contents_file_path = retry(PackageAnalyzer._download_contents_file)(self)
-        stats = self._parse_contents_file(contents_file_path, top_n, validate_lines)
+        contents_file_path = retry(
+            PackageAnalyzer._download_contents_file
+        )(self)
+        stats = self._parse_contents_file(
+            contents_file_path, top_n, validate_lines
+        )
 
         self._cleanup_downloaded_file(contents_file_path)
 
@@ -88,7 +95,9 @@ class PackageAnalyzer:
 
             try:
                 contents_file_path, _ = urllib.request.urlretrieve(
-                    self._mirror_url, target_file, reporthook=update_progress_bar
+                    self._mirror_url,
+                    target_file,
+                    reporthook=update_progress_bar,
                 )
                 return contents_file_path
 
@@ -112,7 +121,9 @@ class PackageAnalyzer:
 
             for line in file:
                 if validate_lines and not self._is_contents_line_valid(line):
-                    logging.warning(f"Invalid format detected in line: {line.strip()}")
+                    logging.warning(
+                        f"Invalid format detected in line: {line.strip()}"
+                        )
                     continue
 
                 packages = self._get_package_names(line)
@@ -120,7 +131,11 @@ class PackageAnalyzer:
                 for package in packages:
                     package_stats[package] += 1
 
-        return sorted(package_stats.items(), key=lambda x: x[1], reverse=True)[:top_n]
+        return sorted(
+            package_stats.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )[:top_n]
 
     @staticmethod
     def _is_contents_line_valid(contents_line: str) -> bool:

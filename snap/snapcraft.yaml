@@ -21,3 +21,6 @@ parts:
 apps:
   package-analyzer:
     command: bin/package_analyzer
+
+architectures:
+  - build-on: [arm64]
