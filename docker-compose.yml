@@ -3,6 +3,6 @@ version: '3.7'
 services:
   app:
     build: .
-    container_name: app_tester
+    container_name: package-analyzer
     volumes:
       - .:/usr/src/app
